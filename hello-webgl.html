@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Hello WebGL</title>
+		<style type="text/css">
+			html, body {margin:0;padding:0;text-align:center;}
+			canvas {margin:50px;}
+		</style>
+	</head>
+	
+	<body>
+		<!-- 画布 -->
+		<canvas id="cv" width="400" height="400"></canvas>
+		
+		<!-- 顶点着色器 -->
+		<script type="x-shader/x-vertex" id="vs-shader">
+			void main() {
+				gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+				gl_PointSize = 100.0;
+			}
+		</script>
+		
+		<!-- 片段着色器 -->
+		<script type="x-shader/x-fragment" id="fs-shader">
+			void main() {
+				gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+			}
+		</script>
+		
+		<script type="text/javascript">
+			//获取WebGL绘图接口
+			let cv = document.getElementById("cv"),
+				gl = cv.getContext('webgl');
+			
+			//着色器使用GLSL ES语言，可将其存放在字符串中，等待调用
+			//初始化着色器
+			let vs_src = document.getElementById("vs-shader").innerHTML,
+				fs_src = document.getElementById("fs-shader").innerHTML;
+				
+			//创建顶点着色器对象
+			let vShader = gl.createShader(gl.VERTEX_SHADER);
+			gl.shaderSource(vShader, vs_src); //绑定资源
+			gl.compileShader(vShader); //编译着色器
+			
+			//创建片段着色器对象
+			let fShader = gl.createShader(gl.FRAGMENT_SHADER);
+			gl.shaderSource(fShader, fs_src); //绑定资源
+			gl.compileShader(fShader); //编译着色器
+			
+			//创建着色器程序
+			let glProgram = gl.createProgram();
+			//把着色器添加到着色程序中
+			gl.attachShader(glProgram, vShader);
+			gl.attachShader(glProgram, fShader);
+			//把着色程序链接成一个完整的程序
+			gl.linkProgram(glProgram);
+			//使用这个完整的着色程序
+			gl.useProgram(glProgram);
+			
+			//清空画布（如果需要）
+			gl.clearColor(0.0, 0.0, 0.0, 0.75); //设置清空颜色
+			gl.clear(gl.COLOR_BUFFER_BIT); //用设置的颜色清空画布
+			
+			//绘制一个点
+			gl.drawArrays(gl.POINTS, 0, 1);
+		</script>
+	</body>
+</html>
