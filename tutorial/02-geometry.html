@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Geometry - iThreeJs</title>
+		<style type="text/css">
+			html, body {margin:0;padding:0;}
+			.container {margin:30px auto;padding:20px;width:800px;border:1px solid #ddd;}
+			h3, p {line-height:1.5em;font-size:14px;}
+			h3 {text-align:center;}
+			img {max-width:100%;}
+		</style>
+	</head>
+	
+	<body>
+		<div class="container">
+			<h3>几何形状 Geometry</h3>
+			<p>几何形状Geometry最主要的功能是存储物体的顶点信息</p>
+			<p>基本几何形状：</p>
+			<ul>
+				<li>
+					<p>立方体 CubeGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)</p>
+					<p><img src="pic/geometry01.jpg" /></p>
+				</li>
+				<li>
+					<p>平面 PlaneGeometry(width, height, widthSegments, hightSegments)</p>
+					<p>这里的平面实际是一个长方形，而不是数学意义上无限大小的平面</p>
+					<p>如果需要创建的平面在x轴和z轴所在的平面内，可以通过物体的旋转来实现</p>
+					<p><img src="pic/geometry02.jpg" /></p>
+				</li>
+				<li>
+					<p>球体 SphereGeometry(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, thetaStart, thetaLength)</p>
+					<p>segmentsWidth相当于经度被切成了几瓣，segmentsHeight相当于纬度被切成了几层</p>
+					<p>在图形底层的实现中，并没有曲线的概念，曲线都是由多个折线近似构成的</p>
+					<p><img src="pic/geometry03.jpg" /></p>
+					<p><img src="pic/geometry04.jpg" /></p>
+				</li>
+				<li>
+					<p>圆形 CircleGeometry(radius, segments, thetaStart, thetaLength)</p>
+					<p><img src="pic/geometry05.jpg" /></p>
+				</li>
+				<li>
+					<p>圆柱体 CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded)</p>
+					<p><img src="pic/geometry06.jpg" /></p>
+				</li>
+				<li>
+					<p>正四面体 TetrahedronGeometry(radius, detail)</p>
+					<p><img src="pic/geometry07.jpg" /></p>
+					<p>正八面体 OctahedronGeometry(radius, detail)</p>
+					<p><img src="pic/geometry08.jpg" /></p>
+					<p>正十二面体 IcosahedronGeometry(radius, detail)</p>
+					<p><img src="pic/geometry09.jpg" /></p>
+				</li>
+				<li>
+					<p>圆环 TorusGeometry(radius, tube, radialSegments, tubularSegments, arc)</p>
+					<p><img src="pic/geometry10.jpg" /></p>
+					<p><img src="pic/geometry11.jpg" /></p>
+				</li>
+				<li>
+					<p>圆环结 TorusKnotGeometry(radius, tube, radialSegments, tubularSegments, p, q, heightScale)</p>
+					<p><img src="pic/geometry12.jpg" /></p>
+				</li>
+				<li>
+					<p>文字形状 TextGeometry(text, parameters)</p>
+					<p>使用文字形状需要下载和引用额外的字体库</p>
+					<p><img src="pic/geometry13.jpg" /></p>
+					<p>改变材质和光照后达到的效果</p>
+					<p><img src="pic/geometry14.jpg" /></p>
+				</li>
+				<li>
+					<p>自定义形状 Geometry()</p>
+					<p>自定义形状需要指定每个顶点的位置以及顶点连接情况</p>
+					<p>形状比较复杂的情况下，可以先在3ds Max之类的建模软件中创建模型，然后使用three.js导入到场景中</p>
+					<p>自定义梯台：</p>
+					<p><img src="pic/geometry15.jpg" /></p>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
