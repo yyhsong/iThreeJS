@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Light - iThreeJs</title>
+		<style type="text/css">
+			html, body {margin:0;padding:0;}
+			.container {margin:30px auto;padding:20px;width:800px;border:1px solid #ddd;}
+			h3, p {line-height:1.5em;font-size:14px;}
+			h3 {text-align:center;}
+			img {max-width:100%;}
+		</style>
+	</head>
+	
+	<body>
+		<div class="container">
+			<h3>光照 Light</h3>
+			<p>three.js常用的光照模型</p>
+			<ul>
+				<li>
+					<p>环境光 AmbientLight(hex)</p>
+					<p>环境光是指场景整体的光照效果，是由场景内若干个光源的多次反射形成的亮度一致的效果，通常用来为整个场景指定一个基础亮度</p>
+					<p>环境光没有明确的光源位置，在各处形成的亮度也是一致的</p>
+					<p>环境光通常使用白色或灰色，作为整体光照的基础，否则渲染效果可能会很奇怪</p>
+					<p><img src="pic/light01.jpg" /></p>
+				</li>
+				<li>
+					<p>点光源 PointLight(hex, intensity, distance)</p>
+					<p>点光源不计光源大小，可以看作是一个点发出的光源</p>
+					<p>点光源照到不同物体表面的亮度是线性递减的，因此离点光源越远的物体会越暗</p>
+					<p><img src="pic/light02.jpg" /></p>
+				</li>
+				<li>
+					<p>平行光 DirectionalLight(hex, intensity)</p>
+					<p>对于任意平行的平面，平行光照射的亮度都是相同的，而与平面所在的位置无关</p>
+					<p>对于平行光而言，设置光源位置尤为重要，它决定了光照的方向</p>
+					<p><img src="pic/light03.jpg" /></p>
+				</li>
+				<li>
+					<p>聚光灯 SpotLight(hex, intensity, distance, angle, exponent)</p>
+					<p>聚光灯是一种特殊的点光源，它能够朝着一个方向投射出类似圆锥形的光线</p>
+					<p>聚光灯可以随着物体移动</p>
+					<p><img src="pic/light04.jpg" /></p>
+				</li>
+			</ul>
+			<p>明暗是相对的，阴影的形成是因为比周围获得的光照更少，因此要形成阴影，必须要有光源</p>
+			<p>能形成阴影的光源有平行光和聚光灯</p>
+			<p>能表现阴影效果的材质有LambertMaterial和PhongMaterial</p>
+			<p>对产生阴影的物体设置castShadow，对接收阴影的物体设置receiveShadow</p>
+			<p><img src="pic/light05.jpg" /></p>
+		</div>
+	</body>
+</html>
