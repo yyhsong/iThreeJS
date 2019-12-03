@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>创建第一个3D场景 - iThreeJS</title>
+		<style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+		</style>
+	</head>
+	
+	<body>
+		
+		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
+		<script type="text/javascript">
+			/*
+			 * 场景对象
+			 */
+			let scene = new THREE.Scene();
+			
+			/*
+			 * 网格模型
+			 */
+			//let geometry = new THREE.BoxGeometry(100, 100, 100); //创建几何体：立方体
+			let geometry = new THREE.SphereGeometry(100, 60, 40); //创建几何体：球体
+			let material = new THREE.MeshLambertMaterial({ //创建Lambert材质
+				color: 0xff0000
+			});
+			let mesh = new THREE.Mesh(geometry, material); //创建网格模型
+			scene.add(mesh); //把Mesh添加到场景中
+			
+			/*
+			 * 光照
+			 */
+			let aLight = new THREE.AmbientLight(0x444444); //创建环境光
+			scene.add(aLight); //把环境光添加到场景中
+			let pLight = new THREE.PointLight(0xffffff); //创建点光源
+			pLight.position.set(400, 200, 200); //设置点光源位置
+			scene.add(pLight); //把点光源添加到场景中
+			
+			/*
+			 * 照相机
+			 */
+			let w = window.innerWidth;
+			let h = window.innerHeight;
+			let k = w / h;
+			let s = 300; //场景显示范围控制系数，系数越大，显示的范围越大
+			//THREE.OrthographicCamera(left, right, top, bottom, near, far)
+			let camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000); //正交投影照相机
+			camera.position.set(200, 300, 200); //设置照相机位置
+			camera.lookAt(scene.position); //设置照相机方向
+			
+			/*
+			 * 渲染器
+			 */
+			let renderer = new THREE.WebGLRenderer(); //WebGL渲染器
+			renderer.setSize(w, h); //设置渲染区域大小
+			renderer.setClearColor(0x000000, 1); //设置渲染区域背景色
+			document.body.appendChild(renderer.domElement); //在body中插入canvas对象
+			
+			//执行渲染，场景和照相机作为参数
+			renderer.render(scene, camera);
+		</script>
+	</body>
+</html>
