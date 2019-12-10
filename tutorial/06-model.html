@@ -16,23 +16,15 @@
 	<body>
 		<div class="container">
 			<h3>外部模型 Model</h3>
-			<p>使用常见几何体组合复杂的模型会比较麻烦，可以先通过3dx Max等工具制作三维模型，然后导入到three.js的场景中</p>
-			<p>导入模型需要相应的加载器，常用的有：</p>
+			<p>使用常见几何体组合复杂的模型会比较麻烦，可以先通过3dx Max等工具制作三维模型，然后导入到ThreeJS的场景中</p>
+			<p>导入模型需要相应的加载器，例如：</p>
 			<ul>
-				<li><p>OBJLoader.js 导入不带材质的*.obj文件</p></li>
-				<li><p>MTLLoader.js和OBJMTLLoader.js 导入带*.mtl材质的*.obj文件</p></li>
+				<li><p>3MFLoader.js 导入.3mf格式的3D文件</p></li>
+				<li><p>OBJLoader.js 导入.obj格式的3D文件</p></li>
+				<li><p>MTLLoader.js 导入.mtl格式的材质文件</p></li>
 			</ul>
-			<p>three.js支持的模型格式有：</p>
-			<ul>
-				<li><p>*.obj</p></li>
-				<li><p>*.obj, *.mtl</p></li>
-				<li><p>*.dae</p></li>
-				<li><p>*.ctm</p></li>
-				<li><p>*.ply</p></li>
-				<li><p>*.stl</p></li>
-				<li><p>*.wrl</p></li>
-				<li><p>*.vtk</p></li>
-			</ul>
+			<p>ThreeJS支持的加载器包括：</p>
+			<p><img src="pic/model-loaders.jpg" /></p>
 			<p>使用3dx Max制作模型，在导出*.obj时可选择是否带材质*.mtl</p>
 			<p><img src="pic/model01.jpg" /></p>
 			<p>使用OBJLoader导入不带材质的模型</p>
