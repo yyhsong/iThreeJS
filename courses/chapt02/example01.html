@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>加载不带材质的3mf模型 - iThreeJS</title>
+		<style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+		</style>
+	</head>
+	
+	<body>
+		
+		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/libs/jszip.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/controls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/3MFLoader.js"></script>
+		<script type="text/javascript">
+			//全局变量
+			var renderer, scene, camera;
+			
+			//初始化函数
+			init();
+			function init() {
+				//渲染器
+				renderer = new THREE.WebGLRenderer({
+					antialias: true //执行抗锯齿
+				});
+				renderer.setPixelRatio(window.devicePixelRatio); //设置设备像素比，此处值为1
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				document.body.appendChild(renderer.domElement);
+				
+				//场景
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color(0x333333);
+				scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+				
+				//照相机
+				camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 500);
+				camera.up.set(0, 0, 1);
+				camera.position.set(-80, -90, 150);
+				scene.add(camera);
+				
+				//光源
+				var pLight = new THREE.PointLight(0xffffff, 0.8);
+				camera.add(pLight);
+				
+				//控制
+				var controls = new THREE.OrbitControls(camera, renderer.domElement);
+				controls.addEventListener('change', render);
+				controls.minDistance = 50;
+				controls.maxDistance = 300;
+				controls.enablePan = false;
+				controls.target.set(80,65, 20);
+				controls.update();
+				
+				//加载模型
+				var loader = new THREE.ThreeMFLoader();
+				loader.load(
+					"../../assets/models/3mf/cube-gears.3mf",
+					function(obj) {
+						scene.add(obj);
+						render();
+					},
+					function(xhr) {
+						console.log("Loaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+					},
+					function(err) {
+						console.log("Error: ", err);
+					}
+				);
+				
+				//监听浏览器窗口大小变化
+				window.addEventListener("resize", onWindowResize, false);
+			}
+			
+			//渲染函数
+			function render() {
+				//console.log("Render...");
+				renderer.render(scene, camera);
+			}
+			
+			//浏览器窗口大小变化时，调整照相机后重新渲染
+			function onWindowResize() {
+				//console.log("Resize...");
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				render();
+			}
+		</script>
+	</body>
+</html>
