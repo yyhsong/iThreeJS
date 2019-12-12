@@ -36,11 +36,19 @@
 				scene.background = new THREE.Color(0x333333);
 				scene.add(new THREE.AmbientLight(0xffffff, 0.2));
 				
+				//辅助坐标系
+				//var aHelper = new THREE.AxesHelper(300);
+				//scene.add(aHelper);
+				
 				//照相机
 				camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 500);
 				camera.up.set(0, 0, 1);
 				camera.position.set(-80, -90, 150);
 				scene.add(camera);
+				
+				//相机辅助对象
+				//var cHelper = new THREE.CameraHelper(camera);
+				//scene.add(cHelper);
 				
 				//光源
 				var pLight = new THREE.PointLight(0xffffff, 0.8);
@@ -52,7 +60,7 @@
 				controls.minDistance = 50;
 				controls.maxDistance = 300;
 				controls.enablePan = false;
-				controls.target.set(80,65, 20);
+				controls.target.set(80, 65, 20);
 				controls.update();
 				
 				//加载模型
