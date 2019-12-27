@@ -7,12 +7,18 @@
 		<style type="text/css">
 			* {margin:0;padding:0;}
 			html, body {overflow:hidden;}
-			#container {margin:30px auto;width:800px;height:480px;border:1px solid #ccc;}
+			#container {position:relative;margin:30px auto;width:800px;height:480px;border:1px solid #ccc;}
+			#loading {position:absolute;left:50%;top:50%;z-index:99;
+				margin-left:-100px;margin-top:-100px;width:200px;height:200px;
+				line-height:200px;text-align:center;font-size:18px;color:#333;}
+			#loadingPercent {font-size:96px;}
 		</style>
 	</head>
 	
 	<body>
-		<div id="container"></div>
+		<div id="container">
+			<div id="loading"><span id="loadingPercent">0</span>%</div>
+		</div>
 		
 		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/controls/OrbitControls.js"></script>
@@ -79,7 +85,14 @@
 					render();
 				},
 				function(xhr) {
-					console.log("Loaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+					//console.log("Loaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+					
+					let per = (xhr.loaded / xhr.total * 100).toFixed(0);
+					if(per < 100) {
+						document.getElementById("loadingPercent").innerHTML = per;
+					}else {
+						document.getElementById("loading").remove();
+					}
 				},
 				function(err) {
 					console.error("Error: ", err);
