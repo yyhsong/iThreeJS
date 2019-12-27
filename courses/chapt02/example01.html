@@ -7,10 +7,15 @@
 		<style type="text/css">
 			* {margin:0;padding:0;}
 			html, body {overflow:hidden;}
+			#loading {position:absolute;left:50%;top:50%;z-index:99;
+				margin-left:-100px;margin-top:-100px;width:200px;height:200px;
+				line-height:200px;text-align:center;font-size:18px;color:#fff;}
+			#loadingPercent {font-size:96px;}
 		</style>
 	</head>
 	
 	<body>
+		<div id="loading"><span id="loadingPercent">0</span>%</div>
 		
 		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/libs/jszip.min.js"></script>
@@ -72,7 +77,14 @@
 						render();
 					},
 					function(xhr) {
-						console.log("Loaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+						//console.log("Loaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+						
+						let per = (xhr.loaded / xhr.total * 100).toFixed(0);
+						if(per < 100) {
+							document.getElementById("loadingPercent").innerHTML = per;
+						}else {
+							document.getElementById("loading").remove();
+						}
 					},
 					function(err) {
 						console.log("Error: ", err);
