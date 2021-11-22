@@ -13,8 +13,12 @@
 		
 		<script type="text/javascript" src="assets/js/three.min.js"></script>
 		<script type="text/javascript">
-			let camera, scene, renderer;
-			let geometry, material, mesh;
+			/**
+			 * three.js JavaScript 3D Library
+			 */
+			
+			let camera, scene, renderer;  // 摄像机、场景、渲染器
+			let geometry, material, mesh;  // 几何体、材质、网格
 			
 			function init() {
 				camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
@@ -30,6 +34,7 @@
 				
 				renderer = new THREE.WebGLRenderer({antialias: true});
 				renderer.setSize(window.innerWidth, window.innerHeight);
+				//renderer.setAnimationLoop(animate);
 				document.body.appendChild(renderer.domElement);
 			}
 			
