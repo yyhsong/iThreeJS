@@ -91,7 +91,9 @@
 					if(per < 100) {
 						document.getElementById("loadingPercent").innerHTML = per;
 					}else {
-						document.getElementById("loading").remove();
+						if(document.getElementById("loading")) {
+							document.getElementById("loading").remove();
+						}
 					}
 				},
 				function(err) {
