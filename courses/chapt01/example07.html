@@ -14,8 +14,14 @@
 		
 		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/controls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../../assets/js/libs/dat.gui.min.js"></script>
 		<script type="text/javascript">
 			let camera, scene, renderer, ctrl;
+			const poi = {
+				x: 200,
+				y: 200,
+				z: 200
+			};
 			
 			// 初始化
 			function init() {
@@ -47,7 +53,7 @@
 				
 				// 相机
 				camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 500);
-				camera.position.set(200, 200, 200);
+				camera.position.set(poi.x, poi.y, poi.z);
 				camera.lookAt(scene.position);
 				
 				// 辅助
@@ -56,10 +62,26 @@
 				//let cHelper = new THREE.CameraHelper(camera);
 				//scene.add(cHelper);
 				
-				// 控制
+				// 鼠标控制
 				ctrl = new THREE.OrbitControls(camera, renderer.domElement);
 				ctrl.addEventListener('change', render);
 				ctrl.update();
+				
+				// 参数控制
+				const gui = new dat.GUI();
+				gui.add(poi, 'x', -500, 500).onChange(function() {
+					camera.position.set(poi.x, poi.y, poi.z);
+					camera.lookAt(scene.position);
+				});
+				gui.add(poi, 'y', -500, 500).onChange(function() {
+					camera.position.set(poi.x, poi.y, poi.z);
+					camera.lookAt(scene.position);
+				});
+				gui.add(poi, 'z', -500, 500).onChange(function() {
+					camera.position.set(poi.x, poi.y, poi.z);
+					camera.lookAt(scene.position);
+				});
+				gui.open();
 				
 				// 监听浏览器窗口大小变化
 				window.addEventListener("resize", onWindowResize);
@@ -71,6 +93,7 @@
 			// 渲染
 			function render() {
 				renderer.render(scene, camera);
+				requestAnimationFrame(render);
 			}
 			
 			// 浏览器窗口大小变化时，调整照相机后重新渲染
