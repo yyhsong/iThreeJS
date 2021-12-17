@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Animation - iThreeJs</title>
+		<style type="text/css">
+			html, body {margin:0;padding:0;}
+			.container {margin:30px auto;padding:20px;width:800px;border:1px solid #ddd;}
+			h3, p {line-height:1.5em;font-size:14px;}
+			h3 {text-align:center;}
+			img {max-width:100%;}
+		</style>
+	</head>
+	
+	<body>
+		<div class="container">
+			<h3>动画 Animation</h3>
+			<p>动画的本质是利用人眼的视觉暂留特性，快速变换画面，从而产生物体在运动的假象</p>
+			<p>对于three.js程序而言，动画的实现是通过在每秒中多次重绘画面实现的</p>
+			<p>使用每秒帧数FPS(Frames Per Second)来衡量画面切换速度</p>
+			<p>FPS越大，则动画效果越平滑；当FPS小于20时，一般就能明显感受到画面的卡滞现象</p>
+			<p>FPS并非越大越好，当其足够大（比如60）时，再增加帧数人眼也不会感受到明显的变化，但会消耗更多的资源</p>
+			<p>对于three.js动画而言，FPS一般在30到60之间</p>
+			<p>可以使用以下两种方式来实现动画</p>
+			<ul>
+				<li>
+					<p>setInterval()</p>
+				</li>
+				<li>
+					<p>requestAnimationFrame()</p>
+				</li>
+			</ul>
+			<p>可以使用stat.js来记录FPS</p>
+		</div>
+	</body>
+</html>
