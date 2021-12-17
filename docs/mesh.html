@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Mesh - iThreeJs</title>
+		<style type="text/css">
+			html, body {margin:0;padding:0;}
+			.container {margin:30px auto;padding:20px;width:800px;border:1px solid #ddd;}
+			h3, p {line-height:1.5em;font-size:14px;}
+			h3 {text-align:center;}
+			img {max-width:100%;}
+		</style>
+	</head>
+	
+	<body>
+		<div class="container">
+			<h3>网格 Mesh</h3>
+			<p>网格 Mesh(geometry, material)</p>
+			<p>网格是由顶点、边、面组成的物体，创建物体需要指定几何形状和材质</p>
+			<p>几何形状决定了物体的顶点位置等信息，材质决定了物体的颜色、纹理等信息</p>
+			<p>网格是最常用的一种物体，其他物体还有线段Line、骨骼Bone、粒子系统ParticleSystem等</p>
+			<p><img src="pic/mesh01.jpg" /></p>
+			<p>可以在构造函数中指定材质，也可以在网格被创建后，对材质进行修改</p>
+			<p>THREE.Mesh继承自THREE.Object3D</p>
+			<p>位置position、缩放scale、旋转rotation是物体的三个常用属性，它们都是Mesh.Vector3的实例</p>	
+		</div>
+	</body>
+</html>
