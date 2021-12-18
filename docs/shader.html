@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Shader - iThreeJs</title>
+		<style type="text/css">
+			html, body {margin:0;padding:0;}
+			.container {margin:30px auto;padding:20px;width:800px;border:1px solid #ddd;}
+			h3, p {line-height:1.5em;font-size:14px;}
+			h3 {text-align:center;}
+			img {max-width:100%;}
+		</style>
+	</head>
+	
+	<body>
+		<div class="container">
+			<h3>着色器 Shader</h3>
+			<p>渲染Rendering是将模型数据在屏幕上显示出来的过程</p>
+			<p>可以通过着色器程序对GPU编程来控制渲染，对渲染的结果做修改和后处理，从而实现高级的渲染效果</p>
+			<p>同样的模型、光源、照相机等条件下，使用不同的着色器可以得到不同的渲染效果</p>
+			<p><img src="pic/shader01.jpg" /></p>
+			<p>WebGL是基于OpenGL的，而OpenGL使用GLSL(OpenGL Shading Language)这一着色器语言，是一种接近C语言的代码</p>
+			<p>WebGL支持顶点着色器（Vertex Shader）和片元着色器（Fragment Shader）</p>
+			<p>着色器代码可以写在单独的文件中（顶点着色器后缀为*.vs，片元着色器后缀为*.fs），也可以定义在&lt;script&gt;标签中</p>
+			<p>UV映射是将每个面片贴的图统一映射到一张纹理上，记录每个面片贴图在纹理上对应的位置</p>
+			<p><img src="pic/shader02.jpg" /></p>
+		</div>
+	</body>
+</html>
