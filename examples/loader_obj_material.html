@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>加载带材质的obj模型 - iThreeJS</title>
+		<style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+			#loading {position:absolute;left:50%;top:50%;z-index:99;
+				margin-left:-100px;margin-top:-100px;width:200px;height:200px;
+				line-height:200px;text-align:center;font-size:18px;color:#fff;}
+			#loadingPercent {font-size:96px;}
+		</style>
+	</head>
+	
+	<body>
+		<div id="loading"><span id="loadingPercent">0</span>%</div>
+		
+		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/controls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/DDSLoader.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/TGALoader.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/MTLLoader.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/OBJLoader.js"></script>
+		<script type="text/javascript">
+			//全局变量
+			const w = window.innerWidth;
+			const h = window.innerHeight;
+			const r = w / h;
+			const s = 300; //视野范围控制系数
+			
+			//场景
+			const scene = new THREE.Scene();
+			//scene.background = new THREE.Color(0x666666);
+			
+			//光照
+			const aLight = new THREE.AmbientLight(0x404040, 1);
+			scene.add(aLight);
+			const dLight = new THREE.DirectionalLight(0xffffff, 1);
+			scene.add(dLight);
+			const pLight = new THREE.PointLight(0xffffff, 0.8);
+			pLight.position.set(0, 110, 200);
+			scene.add(pLight);
+			
+			//照相机
+			//const camera = new THREE.PerspectiveCamera(75, r, 1, 1000);
+			const camera = new THREE.OrthographicCamera(-s*r, s*r, s, -s, 1, 1000);
+			camera.position.set(0, 120, 300);
+			camera.lookAt(scene.position);
+			
+			//辅助对象
+			//const aHelper = new THREE.AxesHelper(300);
+			//scene.add(aHelper);
+			//const cHelper = new THREE.CameraHelper(camera);
+			//scene.add(cHelper);
+			
+			//渲染器
+			const renderer = new THREE.WebGLRenderer({
+				antialias: true
+			});
+			renderer.setSize(w, h);
+			renderer.setClearColor(0x000000, 1);
+			document.body.appendChild(renderer.domElement);
+			
+			//控制器
+			const ctrl = new THREE.OrbitControls(camera, renderer.domElement);
+			
+			//渲染函数
+			function render() {
+				//console.log("Render...");
+				renderer.render(scene, camera);
+				
+				scene.rotation.y += 0.002;
+				
+				requestAnimationFrame(render);
+			}
+			
+			//加载管理器
+			//const loadMgr = new THREE.LoadingManager();
+			/**
+			 * Registers a loader with the given regular expression. 
+			 * Can be used to define what loader should be used in order to load specific files.
+			 * A typical use case is to overwrite the default loader for textures
+			 */
+			//loadMgr.addHandler(/\.dds$/i, new THREE.DDSLoader());
+			//loadMgr.addHandler(/\.tga$/i, new THREE.TGALoader());
+			
+			//加载模型
+			const mtlLoader = new THREE.MTLLoader();
+			const objLoader = new THREE.OBJLoader();
+			mtlLoader.setPath("../../assets/models/obj/")
+					 .load(
+					 	"IronMan.mtl",
+					 	function(mtl) {
+					 		//console.log("Material: ", mtl);
+					 		//mtl.preload();
+					 		mtl.side = THREE.DoubleSide;
+					 		
+					 		objLoader
+					 			.setMaterials(mtl)
+						 		.load(
+									"../../assets/models/obj/IronMan.obj",
+									function(obj) {
+										//console.log("Model: ", obj);
+										obj.scale.set(1.5, 1.5, 1.5);
+										obj.position.y = -180;
+										scene.add(obj);
+										render();
+									},
+									function(xhr) {
+										//console.log("OBJLoaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+										
+										let per = (xhr.loaded / xhr.total * 100).toFixed(0);
+										if(per < 100) {
+											document.getElementById("loadingPercent").innerHTML = per;
+										}else {
+											if(document.getElementById("loading")) {
+												document.getElementById("loading").remove();
+											}
+										}
+									},
+									function(err) {
+										console.error("OBJError: ", err);
+									}					 			
+						 		);
+					 	},
+					 	function(xhr) {
+							console.log("MTLLoaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+						},
+						function(err) {
+							console.error("MTLError: ", err);
+						}
+					 );
+					 
+			//监听浏览器窗口大小变化
+			window.addEventListener("resize", onWindowResize, false);
+			
+			//浏览器窗口大小变化时，调整照相机后重新渲染
+			function onWindowResize() {
+				//console.log("Resize...");
+				
+				//适用于透视投影
+				//camera.aspect = window.innerWidth / window.innerHeight;
+				
+				//适用于正交投影
+				let r = window.innerWidth / window.innerHeight;
+				camera.left = -s * r;
+				camera.right = s * r;
+				
+				//Updates the camera projection matrix. 
+				//Must be called after any change of parameters.
+				camera.updateProjectionMatrix();
+				
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				render();
+			}
+		</script>
+	</body>
+</html>
