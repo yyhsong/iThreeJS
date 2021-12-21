@@ -20,9 +20,9 @@
 			<div id="loading"><span id="loadingPercent">0</span>%</div>
 		</div>
 		
-		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/controls/OrbitControls.js"></script>
-		<script type="text/javascript" src="../../assets/js/loaders/OBJLoader.js"></script>
+		<script type="text/javascript" src="../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../assets/js/controls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../assets/js/loaders/OBJLoader.js"></script>
 		<script type="text/javascript">
 			//全局变量
 			const w = 800;
@@ -76,7 +76,7 @@
 			//加载模型
 			const loader = new THREE.OBJLoader();
 			loader.load(
-				"../../assets/models/obj/deer.obj",
+				"../assets/models/obj/deer.obj",
 				function(obj) {
 					//console.log("Model: ", obj);
 					obj.scale.set(0.33, 0.33, 0.33);
