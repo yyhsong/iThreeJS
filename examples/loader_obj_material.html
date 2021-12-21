@@ -17,12 +17,12 @@
 	<body>
 		<div id="loading"><span id="loadingPercent">0</span>%</div>
 		
-		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/controls/OrbitControls.js"></script>
-		<script type="text/javascript" src="../../assets/js/loaders/DDSLoader.js"></script>
-		<script type="text/javascript" src="../../assets/js/loaders/TGALoader.js"></script>
-		<script type="text/javascript" src="../../assets/js/loaders/MTLLoader.js"></script>
-		<script type="text/javascript" src="../../assets/js/loaders/OBJLoader.js"></script>
+		<script type="text/javascript" src="../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../assets/js/controls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../assets/js/loaders/DDSLoader.js"></script>
+		<script type="text/javascript" src="../assets/js/loaders/TGALoader.js"></script>
+		<script type="text/javascript" src="../assets/js/loaders/MTLLoader.js"></script>
+		<script type="text/javascript" src="../assets/js/loaders/OBJLoader.js"></script>
 		<script type="text/javascript">
 			//全局变量
 			const w = window.innerWidth;
@@ -89,7 +89,7 @@
 			//加载模型
 			const mtlLoader = new THREE.MTLLoader();
 			const objLoader = new THREE.OBJLoader();
-			mtlLoader.setPath("../../assets/models/obj/")
+			mtlLoader.setPath("../assets/models/obj/")
 					 .load(
 					 	"IronMan.mtl",
 					 	function(mtl) {
@@ -100,7 +100,7 @@
 					 		objLoader
 					 			.setMaterials(mtl)
 						 		.load(
-									"../../assets/models/obj/IronMan.obj",
+									"../assets/models/obj/IronMan.obj",
 									function(obj) {
 										//console.log("Model: ", obj);
 										obj.scale.set(1.5, 1.5, 1.5);
