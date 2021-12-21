@@ -17,10 +17,10 @@
 	<body>
 		<div id="loading"><span id="loadingPercent">0</span>%</div>
 		
-		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/controls/OrbitControls.js"></script>
-		<script type="text/javascript" src="../../assets/js/loaders/3MFLoader.js"></script>
-		<script type="text/javascript" src="../../assets/js/libs/fflate.min.js"></script>
+		<script type="text/javascript" src="../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../assets/js/controls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../assets/js/loaders/3MFLoader.js"></script>
+		<script type="text/javascript" src="../assets/js/libs/fflate.min.js"></script>
 		<script type="text/javascript">
 			//全局变量
 			var renderer, scene, camera;
@@ -71,7 +71,7 @@
 				//加载模型
 				var loader = new THREE.ThreeMFLoader();
 				loader.load(
-					"../../assets/models/3mf/cube-gears.3mf",
+					"../assets/models/3mf/cube-gears.3mf",
 					function(obj) {
 						scene.add(obj);
 						render();
