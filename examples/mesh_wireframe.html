@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>查看几何体的线框模式 - iThreeJS</title>
+		<style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+		</style>
+	</head>
+	
+	<body>
+		
+		<script type="text/javascript" src="../assets/js/three.min.js"></script>
+		<script type="text/javascript">
+			/*
+			 * 场景对象
+			 */
+			let scene = new THREE.Scene();
+			
+			/*
+			 * 几何体
+			 */
+			//let geometry = new THREE.BoxGeometry(100, 100, 100); //立方体
+			let geometry = new THREE.SphereGeometry(100, 60, 40); //球体
+			let wireframe = new THREE.WireframeGeometry(geometry); //创建线框几何体
+			let line = new THREE.LineSegments(wireframe);
+			line.material.depthTest = false;
+			line.material.opacity = 0.25;
+			line.material.transparent = true;
+			scene.add(line); //把Line添加到场景中
+			
+			/*
+			 * 照相机
+			 */
+			let w = window.innerWidth;
+			let h = window.innerHeight;
+			let k = w / h;
+			let s = 200; //场景显示范围控制系数，系数越大，显示的范围越大
+			//THREE.OrthographicCamera(left, right, top, bottom, near, far)
+			let camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000); //正交投影照相机
+			//let camera = new THREE.PerspectiveCamera(60, k, 1, 1000); //透视投影照相机
+			camera.position.set(100, 150, 200); //设置照相机位置
+			camera.lookAt(scene.position); //设置照相机方向
+			
+			/*
+			 * 渲染器
+			 */
+			let renderer = new THREE.WebGLRenderer(); //WebGL渲染器
+			renderer.setSize(w, h); //设置渲染区域大小
+			renderer.setClearColor(0x000000, 1); //设置渲染区域背景色
+			document.body.appendChild(renderer.domElement); //在body中插入canvas对象
+			
+			//执行渲染，场景和照相机作为参数
+			renderer.render(scene, camera);
+		</script>
+	</body>
+</html>
