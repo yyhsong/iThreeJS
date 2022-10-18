@@ -21,8 +21,6 @@
 		constructor( object, domElement ) {
 
 			super();
-			if ( domElement === undefined ) console.warn( 'THREE.OrbitControls: The second parameter "domElement" is now mandatory.' );
-			if ( domElement === document ) console.error( 'THREE.OrbitControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.' );
 			this.object = object;
 			this.domElement = domElement;
 			this.domElement.style.touchAction = 'none'; // disable touch scroll
@@ -514,9 +512,6 @@
 
 			}
 
-			function handleMouseUp() { // no-op
-			}
-
 			function handleMouseWheel( event ) {
 
 				if ( event.deltaY < 0 ) {
@@ -696,9 +691,6 @@
 				if ( scope.enableZoom ) handleTouchMoveDolly( event );
 				if ( scope.enableRotate ) handleTouchMoveRotate( event );
 
-			}
-
-			function handleTouchEnd() { // no-op
 			} //
 			// event handlers - FSM: listen for events and reset state
 			//
@@ -749,19 +741,7 @@
 
 			function onPointerUp( event ) {
 
-				if ( scope.enabled === false ) return;
-
-				if ( event.pointerType === 'touch' ) {
-
-					onTouchEnd();
-
-				} else {
-
-					onMouseUp( event );
-
-				}
-
-				removePointer( event ); //
+				removePointer( event );
 
 				if ( pointers.length === 0 ) {
 
@@ -770,6 +750,9 @@
 					scope.domElement.removeEventListener( 'pointerup', onPointerUp );
 
 				}
+
+				scope.dispatchEvent( _endEvent );
+				state = STATE.NONE;
 
 			}
 
@@ -859,8 +842,6 @@
 
 			function onMouseMove( event ) {
 
-				if ( scope.enabled === false ) return;
-
 				switch ( state ) {
 
 					case STATE.ROTATE:
@@ -879,14 +860,6 @@
 						break;
 
 				}
-
-			}
-
-			function onMouseUp( event ) {
-
-				handleMouseUp( event );
-				scope.dispatchEvent( _endEvent );
-				state = STATE.NONE;
 
 			}
 
@@ -1004,14 +977,6 @@
 						state = STATE.NONE;
 
 				}
-
-			}
-
-			function onTouchEnd( event ) {
-
-				handleTouchEnd( event );
-				scope.dispatchEvent( _endEvent );
-				state = STATE.NONE;
 
 			}
 
