@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>实现简单的动画效果 - iThreeJS</title>
+		<style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+		</style>
+	</head>
+	
+	<body>
+		
+		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/utils/stats.min.js"></script>
+		<script type="text/javascript">
+			/*
+			 * 场景
+			 */
+			let scene = new THREE.Scene();
+			
+			/*
+			 * 网格模型
+			 */
+			let geometry = new THREE.BoxGeometry(100, 100, 100); //立方体
+			let material = new THREE.MeshNormalMaterial(); //法向量材质
+			let mesh = new THREE.Mesh(geometry, material);
+			scene.add(mesh); //把网格模型添加到场景中
+			
+			/*
+			 * 照相机
+			 */
+			let w = window.innerWidth;
+			let h = window.innerHeight;
+			let k = w / h;
+			let s = 200; //场景显示范围控制系数，系数越大，显示的范围越大
+			let camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000); //正交投影照相机
+			camera.position.set(200, 300, 200); //设置照相机位置
+			camera.lookAt(scene.position); //设置照相机方向
+			
+			/*
+			 * 渲染器
+			 */
+			let renderer = new THREE.WebGLRenderer();
+			renderer.setSize(w, h); //设置渲染区域大小
+			renderer.setClearColor(0x000000, 1); //设置渲染区域背景颜色
+			document.body.appendChild(renderer.domElement); //在body中添加canvas
+			
+			/*
+			 * 使用setInterval()实现动画效果
+			 */
+//			function render() {
+//				renderer.render(scene, camera); //执行渲染
+//				mesh.rotateY(0.01); //每次绕Y轴旋转0.01弧度
+//			}
+//			setInterval("render()", 20); //50FPS
+			
+			/*
+			 * 使用requestAnimationFrame()实现动画效果
+			 * 使用stats.js监控动画执行情况
+			 * Stats: JavaScript Performance Monitor
+			 * FPS Frames rendered in the last second. The higher the number the better.
+			 * MS Milliseconds needed to render a frame. The lower the number the better.
+			 * MB MBytes of allocated memory. (Run Chrome with --enable-precise-memory-info)
+			 * CUSTOM User-defined panel support.
+			 */
+			let stats = new Stats();
+			stats.showPanel(0); //0:fps, 1:ms, 2:mb, 3+:custom
+			document.body.appendChild(stats.dom);
+			
+			function render() {				
+				stats.begin(); //监控开始
+				
+				//被监控的代码块
+				renderer.render(scene, camera); //执行渲染
+				mesh.rotateY(0.01); //每次绕Y轴旋转0.01弧度
+				
+				stats.end(); //监控结束
+				
+				requestAnimationFrame(render); //请求再次执行渲染函数，渲染下一帧
+			}
+			render();
+		</script>
+	</body>
+</html>
