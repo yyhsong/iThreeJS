@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>场景Scene - iThreeJS</title>
+        <style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+		</style>
+    </head>
+
+    <body>
+
+        <script type="text/javascript" src="../../assets/js/three.min.js"></script>
+        <script type="text/javascript" src="../../assets/js/ctrls/TrackballControls.js"></script>
+        <script type="text/javascript" src="../../assets/js/utils/stats.min.js"></script>
+        <script type="text/javascript" src="../../assets/js/utils/dat.gui.min.js"></script>
+
+        <script type="text/javascript" src="../js/util.js"></script>
+        <script type="text/javascript">
+            /*
+             * threejs中的绝大多数对象都继承自THREE.Object3D
+             * 
+             * threejs默认使用右手坐标系，z轴垂直于屏幕
+             * threejs使用的尺寸都是相对值，所以没有单位
+             * 新增对象的位置默认都在原点(0, 0, 0)
+             * 
+             * 显式调用 scene.add(camera) 后，camera才会成为scene的children，否则camera不在scene的对象树中
+             * 无论是否显式调用，在渲染时都必须同时添加 renderer.render(scene, camera)
+             * 
+             * 给对象命名非常有用，可以通过名字直接获取场景中的对象，然后可以执行一些改变位置、大小的操作等
+             * Scene.getObjectByName()
+             */
+            init();
+            function init() {
+                // init stats plane
+                const stats = initStats();
+                
+                // create scene
+                const scene = new THREE.Scene();
+                scene.fog = new THREE.Fog(0xffffff, 0.015, 100);  // 雾化效果
+
+                // create helper
+                const aHelper = new THREE.AxesHelper(100);
+                scene.add(aHelper);
+
+                // create camere
+                const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+                camera.position.x = -30;
+                camera.position.y = 40;
+                camera.position.z = 30;
+                camera.lookAt(scene.position);
+
+                //camera.name = 'PerCamera';
+                //scene.add(camera);
+
+                // create renderer
+                const renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(new THREE.Color(0x000000));
+                renderer.shadowMap.enabled = true;
+
+                // create plane
+                const planeGeometry = new THREE.PlaneGeometry(60, 40, 1, 1);
+                const planeMaterial = new THREE.MeshLambertMaterial({
+                    color: 0xffffff
+                });
+                const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+                plane.receiveShadow = true;
+
+                plane.rotation.x = -0.5 * Math.PI;
+                plane.position.x = 0;
+                plane.position.y = 0;
+                plane.position.z = 0;
+
+                scene.add(plane);
+
+                // create light
+                const aLight = new THREE.AmbientLight(0x3c3c3c);
+                scene.add(aLight);
+
+                const sLight = new THREE.SpotLight(0xffffff, 1.2, 150, 120);
+                sLight.position.set(-40, 60, -10);
+                sLight.castShadow = true;
+                scene.add(sLight);
+
+                // add the renderer to the html element
+                document.body.appendChild(renderer.domElement);
+
+                // controls
+                let ctrls = new function() {
+                    this.rotationSpeed = 0.01;
+                    this.numberOfObjects = scene.children.length;
+
+                    this.addCube = function() {
+                        let cubeSize = Math.ceil((Math.random() * 3));
+                        let cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+                        let cubeMtl = new THREE.MeshLambertMaterial({
+                            color: Math.random() * 0xffffff
+                        });
+                        let cube = new THREE.Mesh(cubeGeo, cubeMtl);
+                        cube.name = 'cube-' + scene.children.length;
+                        cube.castShadow = true;
+
+                        cube.position.x = Math.round(Math.random() * planeGeometry.parameters.width) - 30;
+                        cube.position.y = Math.round(Math.random() * 5);
+                        cube.position.z = Math.round(Math.random() * planeGeometry.parameters.height) - 20;
+
+                        scene.add(cube);
+                        this.numberOfObjects = scene.children.length;
+                    };
+
+                    this.removeCube = function() {
+                        let allChildren = scene.children;
+                        let lastObject = allChildren[allChildren.length - 1];
+                        if(lastObject instanceof THREE.Mesh) {
+                            scene.remove(lastObject);
+                            this.numberOfObjects = scene.children.length;
+                        }
+                    };
+
+                    this.outputObjects = function() {
+                        console.log(scene.children);
+                    };
+                };
+
+                const gui = new dat.GUI();
+                gui.add(ctrls, 'rotationSpeed', 0, 0.5);
+                gui.add(ctrls, 'numberOfObjects').listen();
+                gui.add(ctrls, 'addCube');
+                gui.add(ctrls, 'removeCube');
+                gui.add(ctrls, 'outputObjects');
+
+                // create trackball
+                const trackballControls = initTrackballControls(camera, renderer);
+                const clock = new THREE.Clock();
+                
+                // render
+                render();
+                function render() {
+                    trackballControls.update(clock.getDelta());
+                    stats.update();
+
+                    // rotate the cubes around it's axes
+                    scene.traverse(function(e) {
+                        if(e instanceof THREE.Mesh && e != plane) {
+                            e.rotation.x += ctrls.rotationSpeed;
+                            e.rotation.y += ctrls.rotationSpeed;
+                            e.rotation.z += ctrls.rotationSpeed;
+                        }
+                    });
+
+                    requestAnimationFrame(render);
+                    renderer.render(scene, camera);
+                };
+            }
+        </script>
+    </body>
+</html>
