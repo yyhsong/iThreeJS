@@ -81,7 +81,7 @@
                 gui.add(ctrls, 'rotateY', 0, 180).onChange(function() {
                     ball.rotateY(ctrls.rotateY);
                 });
-                gui.add(ctrls, 'translateY', 0, 1).onChange(() => {
+                gui.add(ctrls, 'translateY', -1, 1).onChange(() => {
                     ball.translateY(ctrls.translateY);
                 });
                 gui.add(ctrls, 'scale', 0.5, 3).onChange(() => {
