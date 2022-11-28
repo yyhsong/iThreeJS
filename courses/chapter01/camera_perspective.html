@@ -59,13 +59,13 @@
 				// 辅助
 				let aHelper = new THREE.AxesHelper(200);
 				scene.add(aHelper);
-				//let cHelper = new THREE.CameraHelper(camera);
-				//scene.add(cHelper);
+				let cHelper = new THREE.CameraHelper(camera);
+				scene.add(cHelper);
 				
 				// 鼠标控制
 				ctrl = new THREE.OrbitControls(camera, renderer.domElement);
 				ctrl.addEventListener('change', render);
-				ctrl.update();
+				//ctrl.update();
 				
 				// 参数控制
 				const gui = new dat.GUI();
