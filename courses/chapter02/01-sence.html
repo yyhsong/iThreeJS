@@ -67,13 +67,8 @@
                     color: 0xffffff
                 });
                 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+                plane.rotation.x = -0.5 * Math.PI;  // plane从x-y轴所在的平面内翻转到x-z所在的平面内
                 plane.receiveShadow = true;
-
-                plane.rotation.x = -0.5 * Math.PI;
-                plane.position.x = 0;
-                plane.position.y = 0;
-                plane.position.z = 0;
-
                 scene.add(plane);
 
                 // create light
