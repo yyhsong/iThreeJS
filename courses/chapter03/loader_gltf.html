@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>加载gltf模型 - iThreeJS</title>
+		<style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+			#loading {position:absolute;left:50%;top:50%;z-index:99;
+				margin-left:-100px;margin-top:-100px;width:200px;height:200px;
+				line-height:200px;text-align:center;font-size:18px;color:#fff;}
+			#loadingPercent {font-size:96px;}
+		</style>
+	</head>
+	
+	<body>
+		<!-- <div id="loading"><span id="loadingPercent">0</span>%</div> -->
+		
+		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/ctrls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/GLTFLoader.js"></script>
+		<script type="text/javascript" src="../../assets/js/utils/stats.min.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript">
+			const w = window.innerWidth;
+			const h = window.innerHeight;
+
+			let stats;
+			let renderer, scene, camera;
+
+			init();
+
+			function init() {
+				stats = initStats();
+
+				renderer = new THREE.WebGLRenderer({
+					antialias: true
+				});
+				renderer.setSize(w, h);
+				renderer.setClearColor(0x000000, 1);
+				//renderer.shadowMap.enabled = true;
+				document.body.appendChild(renderer.domElement);
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera(45, w / h, 1, 1000);
+				camera.position.set(0, 150, 250);
+				camera.lookAt(scene.position);
+
+				const aLight = new THREE.AmbientLight(0xffffff, 1);
+				scene.add(aLight);
+
+				//const aHelper = new THREE.AxesHelper(500);
+				//scene.add(aHelper);
+				//const cHelper = new THREE.CameraHelper(camera);
+				//scene.add(cHelper);
+
+				const ctrl = new THREE.OrbitControls(camera, renderer.domElement);
+
+				window.addEventListener('resize', onWindowResize);
+
+				loadModel();
+
+				render();
+			}
+
+			function render() {
+				stats.update();
+
+				renderer.render(scene, camera);
+
+				scene.rotation.y += 0.001;
+
+				requestAnimationFrame(render);
+			}
+
+			function onWindowResize() {
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				render();
+			}
+
+			function loadModel() {
+				const loader = new THREE.GLTFLoader();
+				loader.load('../../assets/models/gltf/park.gltf', 
+						function(obj) {
+							obj.scene.scale.set(0.5, 0.5, 0.5);
+							obj.scene.position.z = -50;
+							scene.add(obj.scene);
+						},
+						function(xhr) {
+							let per = (xhr.loaded / xhr.total * 100).toFixed(0);
+							console.log('Loading: ', per, '%');
+						},
+						function(err) {
+							console.error('Error: ', err);
+						});
+			}
+		</script>
+	</body>
+</html>
