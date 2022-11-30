@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>加载带材质和贴图的obj模型 - iThreeJS</title>
+		<style type="text/css">
+			* {margin:0;padding:0;}
+			html, body {overflow:hidden;}
+			#loading {position:absolute;left:50%;top:50%;z-index:99;
+				margin-left:-100px;margin-top:-100px;width:200px;height:200px;
+				line-height:200px;text-align:center;font-size:18px;color:#fff;}
+			#loadingPercent {font-size:96px;}
+		</style>
+	</head>
+	
+	<body>
+		<div id="loading"><span id="loadingPercent">0</span>%</div>
+		
+		<script type="text/javascript" src="../../assets/js/three.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/ctrls/OrbitControls.js"></script>
+		<script type="text/javascript" src="../../assets/js/ctrls/TrackballControls.js"></script>
+		<script type="text/javascript" src="../../assets/js/ctrls/CameraControls.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/OBJLoader.js"></script>
+		<script type="text/javascript" src="../../assets/js/loaders/MTLLoader.js"></script>
+		<script type="text/javascript" src="../../assets/js/utils/stats.min.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript">
+			const w = window.innerWidth;
+			const h = window.innerHeight;
+			const r = w / h;
+			const s = 40;  // 视野控制系数
+
+			let stats;
+			let renderer, scene, camera;
+			let orbitCtrl, trackCtrl, cameraCtrl;
+
+			// Object for keeping track of time
+			const clock = new THREE.Clock();
+
+			init();
+
+			function init() {
+				stats = initStats();
+
+				renderer = new THREE.WebGLRenderer({
+					antialias: true
+				});
+				renderer.setSize(w, h);
+				renderer.setClearColor(0x000000, 1);
+				//renderer.shadowMap.enabled = true;
+				document.body.appendChild(renderer.domElement);
+
+				scene = new THREE.Scene();
+
+				//camera = new THREE.OrthographicCamera(-s*r, s*r, s, -s, 1, 500);
+				//camera.position.set(0, 15, 100);
+				camera = new THREE.PerspectiveCamera(45, w / h, 1, 1000);
+				camera.position.set(0, 25, 100);
+				camera.lookAt(scene.position);
+
+				const aLight = new THREE.AmbientLight(0xffffff, 1);
+				scene.add(aLight);
+
+				// const aHelper = new THREE.AxesHelper(500);
+				// scene.add(aHelper);
+				// const cHelper = new THREE.CameraHelper(camera);
+				// scene.add(cHelper);
+
+				// Orbit controls allow camera to orbit around a target. 
+				orbitCtrl = new THREE.OrbitControls(camera, renderer.domElement);
+				orbitCtrl.maxPolarAngle = Math.PI / 2;  // 限制纵向翻转的最大角度
+				orbitCtrl.maxDistance = 200;  // 通过距离远近限制缩放范围，只适用于透视投影相机
+				orbitCtrl.minDistance = 50;
+				// orbitCtrl.autoRotate = true;  // 自动旋转
+				// orbitCtrl.autoRotateSpeed = 1.0;  // 旋转速度
+				orbitCtrl.enableDamping = true;  // 是否有惯性
+				orbitCtrl.dampingFactor = 0.1;  // 惯性系数，值越大，惯性越小
+				orbitCtrl.listenToKeyEvents(window);  // 启用键盘事件，对Camera进行平移
+				// events
+				// orbitCtrl.addEventListener('start', function() {
+				// 	console.log('start...');
+				// });
+				// orbitCtrl.addEventListener('change', () => {
+				// 	console.log('change...');
+				// });
+				// orbitCtrl.addEventListener('end', () => {
+				// 	console.log('end...');
+				// 	console.log(camera.position);
+				// });
+				// update() must be called after any manual changes to the camera's transform
+				// ctrl.update();
+
+				// Trackball controls - 与OrbitControls相似，但可以同时在水平和垂直方向上翻转
+				// trackCtrl = new THREE.TrackballControls(camera, renderer.domElement);
+				// trackCtrl.staticMoving = false;  // 是否有惯性
+
+				// Camera controls - 第三方扩展，与OrbitControls相识，支持更平滑的转化和更多特性
+				// CameraControls.install({THREE: THREE});
+				// cameraCtrl = new CameraControls(camera, renderer.domElement);
+				// cameraCtrl.maxPolarAngle = Math.PI / 2;
+
+				window.addEventListener('resize', onWindowResize);
+
+				loadModel();
+			}
+
+			function loadModel() {
+				const mtlLoader = new THREE.MTLLoader();
+				const objLoader = new THREE.OBJLoader();
+				mtlLoader.load("../../assets/models/obj/microgrid/microgrid.mtl",
+							function(mtl) {
+								mtl.side = THREE.DoubleSide;
+								
+								objLoader
+									.setMaterials(mtl)
+									.load(
+										"../../assets/models/obj/microgrid/microgrid.obj",
+										function(obj) {
+											//console.log("Model: ", obj);
+											obj.name = 'microgrid';
+											obj.scale.set(3, 3, 3);
+											obj.position.x = -40;
+											obj.position.y = -5;
+											scene.add(obj);
+											render();
+										},
+										function(xhr) {
+											let per = (xhr.loaded / xhr.total * 100).toFixed(0);
+											if(per < 100) {
+												document.getElementById("loadingPercent").innerHTML = per;
+											}else {
+												if(document.getElementById("loading")) {
+													document.getElementById("loading").remove();
+												}
+											}
+										},
+										function(err) {
+											console.error("OBJError: ", err);
+										}					 			
+									);
+							},
+							function(xhr) {
+								console.log("MTLLoaded: ", (xhr.loaded / xhr.total * 100).toFixed(0), "%");
+							},
+							function(err) {
+								console.error("MTLError: ", err);
+							}
+						);
+				
+			}
+
+			function render() {
+				requestAnimationFrame(render);
+
+				stats.update();
+
+				scene.rotation.y += 0.001;
+				// scene.getObjectByName('microgrid').rotation.y += 0.001;
+
+				// Update orbit controls - 实际改变的是Camera的位置
+				// Must be called after any manual changes to the camera's transform, 
+				// or in the update loop if .autoRotate or .enableDamping are set.
+				orbitCtrl.update();
+
+				// Updates the Trackball controls. Usually called in the animation loop.
+				// trackCtrl.update();
+
+				// Update the Camera controls, 必须有参数
+				// cameraCtrl.update(clock.getDelta());
+
+				renderer.render(scene, camera);
+			}
+
+			function onWindowResize() {
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				render();
+			}
+		</script>
+	</body>
+</html>
